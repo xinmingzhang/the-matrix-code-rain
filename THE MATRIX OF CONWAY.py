@@ -32,11 +32,6 @@ ROW =int(SCREEN_SIZE[1]/FONT_HEIGHT)
 
 CELL_NUM = COLUMN * ROW
 
-BG = []
-for i in range(COLUMN):
-    BG.append([])
-    for j in range(ROW):
-        BG[i].append('dead')
 
 def print_text(surface,position,text,size,colour,bg_colour=None):
     font_layer = pg.font.Font(GAME_FONT,size)

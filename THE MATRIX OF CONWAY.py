@@ -18,7 +18,7 @@ GAME_FONT=FONTS['matrix code nfi']
 
 STRING ='abcdefghijklmnopqrstuvwxyz1234567890!#$%^&*()-=+\|]}[{;:/?.>,<~'
 CAPTION= 'The Matrix of Conway\'s game'
-SCREEN_SIZE =(640,480)
+SCREEN_SIZE =(320,240)
 FONT_SIZE = 23
 FONT_WIDTH = 10
 FONT_HEIGHT = 20
@@ -71,11 +71,14 @@ class World:
             return 'dead'
 
     def update(self,dt,surface):
+        self.copy = self.cells.copy()
+        for i in range(CELL_NUM):
+            if self.cells[i].state == 'alive':
+                self.copy[i].state = self.alive_judge(self.cells[i].neighbours())
+            elif self.cells[i].state == 'dead':
+                self.copy[i].state = self.dead_judge(self.cells[i].neighbours())
+        self.cells = self.copy.copy()
         for cell in list(self.cells.values()):
-            if cell.state == 'alive':
-                cell.state = self.alive_judge(cell.neighbours())
-            elif cell.state == 'dead':
-                cell.state = self.dead_judge(cell.neighbours())
             cell.update(dt,surface)
 
 class Cell(pg.sprite.Sprite):
@@ -95,7 +98,7 @@ class Cell(pg.sprite.Sprite):
         for num in range(CELL_NUM):
             i = num//COLUMN
             j = num%COLUMN
-            if (i-x<=1 and i-x >= -1) and (j-y<=1 and j-y >= -1) and not (i-x==0 and j-y==0):
+            if abs(i-x)<=1 and abs(j-y)<=1 and not (i-x==0 and j-y==0):
                 neighbours.append(num)
         return neighbours
 
